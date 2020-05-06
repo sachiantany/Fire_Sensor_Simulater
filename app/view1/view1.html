@@ -1,0 +1,106 @@
+<div ng-app="myApp" ng-controller="View1Ctrl" class="inset" ng-cloak>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+
+            <th scope="col">Sensor&nbsp;ID</th>
+            <th scope="col">Sensor&nbsp;Name</th>
+            <th scope="col">Floor&nbsp;No</th>
+            <th scope="col">Room&nbsp;No</th>
+            <th scope="col">CO2</th>
+            <th scope="col">Smoke</th>
+            <th scope="col">Status</th>
+            <th scope="col">Edit</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="x in sensorList | orderBy : 'id'">
+
+            <th scope="row">{{x.id}}</th>
+            <td>{{x.sensorname}}</td>
+            <td>{{x.floor}}</td>
+            <td>{{x.room}}</td>
+            <td>{{(x.status == "Active" ? (x.co2).toString().concat('%') : 'NA')}}</td>
+            <td>{{(x.status == "Active" ? (x.smoke).toString().concat('%') : 'NA')}}</td>
+            <td>{{x.status}}</td>
+            <td>
+
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal{{x.id}}"><i
+                        class="fas fa-edit"></i></button>
+
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr ng-repeat="z in sensorList">
+            <td>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal{{z.id}}" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Set&nbsp;Smoke&nbsp;&amp;&nbsp;CO2&nbsp;Level</h5>
+                                <button type="button" class="close" ng-click="" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>
+                                    ID&nbsp;:&nbsp;{{z.id}}<br/>
+                                    Sensor&nbsp;:&nbsp;{{z.sensorname}}<br/>
+                                    Floor&nbsp;:&nbsp;{{z.floor}}<br/>
+                                    Room&nbsp;:&nbsp;{{z.room}}
+                                </h5>
+                                <form>
+
+
+                                    <md-switch ng-model="z.status" aria-label="Status" ng-true-value="'Active'"
+                                               ng-false-value="'Inactive'">
+                                        Status&nbsp;:&nbsp;{{ z.status }}
+                                    </md-switch>
+
+                                    <md-slider-container>
+                                        <span>CO2</span>
+                                        <md-slider min="0" max="100" ng-disabled="(z.status === 'Inactive')"
+                                                   ng-model="z.co2" aria-label="CO2" id="red-slider"
+                                                   class="md-warn">
+                                        </md-slider>
+                                        <md-input-container>
+                                            <input type="number" ng-disabled="(z.status === 'Inactive')"
+                                                   ng-value="z.co2" min="0" max="100" aria-label="CO2"
+                                                   aria-controls="red-slider">
+                                        </md-input-container>
+                                    </md-slider-container>
+
+                                    <md-slider-container>
+                                        <span>Smoke</span>
+                                        <md-slider ng-model="z.smoke" min="0" ng-disabled="(z.status === 'Inactive')"
+                                                   max="100" aria-label="Smoke" id="green-slider"
+                                                   class="md-accent">
+                                        </md-slider>
+                                        <md-input-container>
+                                            <input type="number" ng-disabled="(z.status === 'Inactive')" min="0"
+                                                   max="100" ng-value="z.smoke" aria-label="Smoke"
+                                                   aria-controls="green-slider">
+                                        </md-input-container>
+                                    </md-slider-container>
+
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" ng-click="" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+    </table>
+</div>
+
