@@ -1,5 +1,7 @@
-<div ng-app="myApp" ng-controller="View1Ctrl" class="inset" ng-cloak>
-    <table class="table table-bordered">
+<div ng-app="myApp" ng-controller="View1Ctrl" class="inset" ng-cloak ng-init="loadData()">
+    <h1>Sensor&nbsp;Dashboard</h1>
+
+    <table class="table table-bordered" >
         <thead class="thead-dark">
         <tr>
 
@@ -24,7 +26,8 @@
             <td>{{x.status}}</td>
             <td>
 
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal{{x.id}}"><i
+                <button type="button" class="btn btn-info" data-backdrop="static"
+                        data-keyboard="false" data-toggle="modal" data-target="#exampleModal{{x.id}}"><i
                         class="fas fa-edit"></i></button>
 
             </td>
@@ -39,9 +42,10 @@
                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
+                            <form id="exampleModalForm{{z.id}}" ng-submit="saveData('exampleModalForm'.concat(z.id), z.id)">
                             <div class="modal-header">
                                 <h5 class="modal-title">Set&nbsp;Smoke&nbsp;&amp;&nbsp;CO2&nbsp;Level</h5>
-                                <button type="button" class="close" ng-click="" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" ng-click="loadData()" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -52,48 +56,50 @@
                                     Floor&nbsp;:&nbsp;{{z.floor}}<br/>
                                     Room&nbsp;:&nbsp;{{z.room}}
                                 </h5>
-                                <form>
 
 
+                                    <label>Status
                                     <md-switch ng-model="z.status" aria-label="Status" ng-true-value="'Active'"
-                                               ng-false-value="'Inactive'">
-                                        Status&nbsp;:&nbsp;{{ z.status }}
-                                    </md-switch>
+                                               ng-false-value="'Inactive'">{{ z.status }}</md-switch></label>
 
+                                    <input hidden type="text" id="{{'id'.concat(z.id)}}" name="id" ng-model="z.id"/>
+                                    <input hidden type="text" id="{{'sensorname'.concat(z.id)}}"name="sensorname" ng-model="z.sensorname"/>
+                                    <input hidden type="text" id="{{'floor'.concat(z.id)}}"name="floor" ng-model="z.floor"/>
+                                    <input hidden type="text" id="{{'room'.concat(z.id)}}"name="room" ng-model="z.room"/>
+                                    <input hidden type="text" id="{{'status'.concat(z.id)}}"name="status" ng-model="z.status"/>
+                                    <input hidden type="text" id="{{'co2'.concat(z.id)}}"name="co2" ng-model="z.co2"/>
+                                    <input hidden type="text" id="{{'smoke'.concat(z.id)}}"name="smoke" ng-model="z.smoke"/>
                                     <md-slider-container>
                                         <span>CO2</span>
-                                        <md-slider min="0" max="100" ng-disabled="(z.status === 'Inactive')"
-                                                   ng-model="z.co2" aria-label="CO2" id="red-slider"
+                                        <md-slider min="0" max="100" ng-disabled="(z.status == 'Inactive')"
+                                                   ng-model="z.co2" aria-label="CO2"
                                                    class="md-warn">
                                         </md-slider>
                                         <md-input-container>
-                                            <input type="number" ng-disabled="(z.status === 'Inactive')"
-                                                   ng-value="z.co2" min="0" max="100" aria-label="CO2"
-                                                   aria-controls="red-slider">
+                                            <p>{{z.co2}}%</p>
                                         </md-input-container>
                                     </md-slider-container>
 
                                     <md-slider-container>
                                         <span>Smoke</span>
-                                        <md-slider ng-model="z.smoke" min="0" ng-disabled="(z.status === 'Inactive')"
-                                                   max="100" aria-label="Smoke" id="green-slider"
-                                                   class="md-accent">
+                                        <md-slider ng-model="z.smoke" min="0" ng-disabled="(z.status == 'Inactive')"
+                                                   max="100" aria-label="Smoke"
+                                                   class="md-warn">
                                         </md-slider>
                                         <md-input-container>
-                                            <input type="number" ng-disabled="(z.status === 'Inactive')" min="0"
-                                                   max="100" ng-value="z.smoke" aria-label="Smoke"
-                                                   aria-controls="green-slider">
+                                            <p>{{z.smoke}}%</p>
                                         </md-input-container>
                                     </md-slider-container>
 
 
-                                </form>
+
                             </div>
                             <div class="modal-footer">
-                                <button type="button" ng-click="" class="btn btn-secondary" data-dismiss="modal">Close
+                                <button type="button" ng-click="loadData()" class="btn btn-secondary" data-dismiss="modal">Close
                                 </button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -102,5 +108,8 @@
         </tr>
 
     </table>
+</div>
+<div>
+
 </div>
 
